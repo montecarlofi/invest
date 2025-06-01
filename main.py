@@ -132,17 +132,14 @@ with buy0:
 	st.write('Real estate')
 	capital_house = st.number_input('Total value', value=300, key='capital_house')
 	capital_goal = st.number_input('Capital goal', value=90, key='capital_goal')
+	capital_current = st.number_input('Current capital', value=90, key='capital_current')
+	capital_to_earn = capital_goal - capital_current
 	monthly_savings = st.number_input('Monthly savings', min_value=0.01, value=2.1, key='monthly_savings')
-	#monthly_savings = float(monthly_savings)
-	# later: percent_growth_real_estate0 = st.slider('\\% growth during saving time', min_value=0, max_value=15, value=0, step=1, key="g_real_estate0", disabled=True)
-	# later: rate_growth_realestate0 = percent_growth_real_estate0/100 + 1
-	#r = np.e**(np.log(future value/present value )/months)
-	capital_goal_after_growth = capital_goal
-	#n_months = float(capital_goal)/float(monthly_savings)
-	#n_months = capital_goal/monthly_savings
+
 	try:
-		n_months = capital_goal/monthly_savings
+		n_months = capital_to_earn/monthly_savings
 	except Exception as e:
+		# "Monthly repayment or savings must be higher than 0!"
 		n_months = 999
 
 	n_months_to_cap = n_months
@@ -329,7 +326,7 @@ Invest.extend(I_stage02)
 #duration = n_months_debt
 duration = n_total_duration_of_activity
 I_stage00 = geometric_series(n = int(n_months_to_cap), repeating_amount=monthly_savings, periodic_rate=rate_growth)
-start_value = I_stage00[-1]
+start_value = I_stage00[-1] if len(I_stage00) > 0 else 0
 I_stage01 = geometric_series(n = duration, start_value=start_value, repeating_amount=monthly_invest1, periodic_rate=rate_growth)
 #print()
 #print("monthly_savings", monthly_savings)
